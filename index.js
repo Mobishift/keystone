@@ -116,6 +116,7 @@ Keystone.prototype.initDatabase = require('./lib/core/initDatabase');
 Keystone.prototype.initExpressApp = require('./lib/core/initExpressApp');
 Keystone.prototype.initExpressSession = require('./lib/core/initExpressSession');
 Keystone.prototype.initNav = require('./lib/core/initNav');
+Keystone.prototype.getUserNav = require('./lib/core/getUserNav');
 Keystone.prototype.list = require('./lib/core/list');
 Keystone.prototype.openDatabaseConnection = require('./lib/core/openDatabaseConnection');
 Keystone.prototype.populateRelated = require('./lib/core/populateRelated');

@@ -60,7 +60,7 @@ module.exports = function(req, res) {
 				var appName = keystone.get('name') || 'Keystone';
 
 				keystone.render(req, res, 'item', {
-					section: keystone.nav.by.list[req.list.key] || {},
+					section: keystone.getUserNav(req).by.list[req.list.key] || {},
 					title: appName + ': ' + req.list.singular + ': ' + req.list.getDocumentName(item),
 					page: 'item',
 					list: req.list,
