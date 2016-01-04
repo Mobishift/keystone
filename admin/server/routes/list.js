@@ -65,7 +65,8 @@ module.exports = function(req, res) {
 		updateHandler.process(req.body, {
 			// flashErrors: true,
 			logErrors: true,
-			fields: req.list.initialFields
+			fields: req.list.initialFields,
+			req: req
 		}, function(err) {
 			if (err) {
 				viewLocals.createErrors = err;

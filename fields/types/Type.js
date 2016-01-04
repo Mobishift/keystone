@@ -18,6 +18,7 @@ var DEFAULT_OPTION_KEYS = [
 	'required',
 	'col',
 	'noedit',
+	'noedit_permissions',
 	'nocol',
 	'nosort',
 	'nofilter',
