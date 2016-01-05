@@ -1,6 +1,7 @@
 var Columns = {
 	azurefile        : require('../../fields/types/azurefile/AzureFileColumn'),
 	boolean          : require('../../fields/types/boolean/BooleanColumn'),
+	booleanaction    : require('../../fields/types/booleanaction/BooleanActionColumn'),
 	cloudinaryimage  : require('../../fields/types/cloudinaryimage/CloudinaryImageColumn'),
 	cloudinaryimages : require('../../fields/types/cloudinaryimages/CloudinaryImagesColumn'),
 	code             : require('../../fields/types/code/CodeColumn'),
