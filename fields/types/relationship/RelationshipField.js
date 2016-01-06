@@ -17,6 +17,13 @@ module.exports = Field.create({
 
 	displayName: 'RelationshipField',
 
+	shouldRenderLink () {
+		var hidden_permissions = this.props.refList.hidden_permissions || [];
+		var user_permission = "user";
+		if (Keystone.user && Keystone.user.permission) user_permission = Keystone.user.permission;
+		return hidden_permissions.indexOf(user_permission) == -1;
+	},
+
 	getInitialState () {
 		return {
 			value: null,
@@ -74,7 +81,7 @@ module.exports = Field.create({
 	},
 
 	cacheItem (item) {
-		item.href = Keystone.adminPath + '/' + this.props.refList.path + '/' + item.id;
+		item.href = this.shouldRenderLink()? Keystone.adminPath + '/' + this.props.refList.path + '/' + item.id: "";
 		this._itemsCache[item.id] = item;
 	},
 

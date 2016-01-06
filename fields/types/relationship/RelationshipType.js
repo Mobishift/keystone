@@ -29,6 +29,7 @@ relationship.prototype.getProperties = function () {
 		refList: {
 			singular: refList.singular,
 			plural:   refList.plural,
+			hidden_permissions: refList.options.hidden_permissions || [],
 			path:     refList.path
 		}
 	};
