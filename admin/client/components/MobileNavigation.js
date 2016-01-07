@@ -140,6 +140,44 @@ var MobileNavigation = React.createClass({
 			</nav>
 		);
 	},
+	renderUser () {
+		var email = Keystone.user.email;
+		var user_permission = Keystone.user.permission || "user";
+		var admin_list_hidden_permissions = [];
+		var admin_list_path = "";
+		if(Keystone.lists.length == null){
+			var list = Keystone.lists[Keystone.adminList];
+			if(list){
+				admin_list_hidden_permissions = list.hidden_permissions || [];
+				admin_list_path = list.path;
+			}
+		}else{
+			for(var i=0; i<Keystone.lists.length; i++){
+				var list = Keystone.lists[i];
+				if (list.key == Keystone.adminList){
+					admin_list_hidden_permissions = list.hidden_permissions || [];
+					admin_list_path = list.path;
+					break;
+				}
+			}
+		}
+		var url = "";
+		var style = {
+			"color": "white",
+			"text-decoration": "none"
+		};
+		if(admin_list_hidden_permissions.indexOf(user_permission) == -1 && admin_list_path){
+			url = Keystone.adminPath + "/" + admin_list_path + "/" + Keystone.user._id;
+			return (
+				<span className="MobileNavigation__bar__label"> | <a href={url} style={style}>{email}</a></span>
+			)
+		}else{
+			style["cursor"] = "default";
+			return (
+				<span className="MobileNavigation__bar__label"> | <a style={style}>{email}</a></span>
+			)
+		}
+	},
 	render () {
 		if (!this.state.barIsVisible) return null;
 
@@ -150,6 +188,7 @@ var MobileNavigation = React.createClass({
 						<span className={'MobileNavigation__bar__icon octicon octicon-' + (this.state.menuIsVisible ? 'x' : 'three-bars')} />
 					</button>
 					<span className="MobileNavigation__bar__label">{this.props.brand}</span>
+					{this.renderUser()}
 					<a href={this.props.signoutUrl} className="MobileNavigation__bar__button MobileNavigation__bar__button--signout">
 						<span className="MobileNavigation__bar__icon octicon octicon-sign-out" />
 					</a>

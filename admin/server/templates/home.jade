@@ -11,7 +11,7 @@ html
 	body
 		#home-view
 		include includes/script/keystone
-		- var getListMeta = function(list) { return _.pick(list, ['key', 'label', 'path']); }
+		- var getListMeta = function(list) { return _.pick(list, ['key', 'label', 'path', 'hidden_permissions']); }
 		script.
 			Keystone.lists = !{JSON.stringify(_.map(lists, getListMeta))};
 			Keystone.orphanedLists = !{JSON.stringify(orphanedLists.map(getListMeta))};

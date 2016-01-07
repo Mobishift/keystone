@@ -43,6 +43,45 @@ var PrimaryNavigation = React.createClass({
 			navIsVisible: window.innerWidth >= 768
 		});
 	},
+	renderUser () {
+		var email = Keystone.user.email;
+		var user_permission = Keystone.user.permission || "user";
+		var admin_list_hidden_permissions = [];
+		var admin_list_path = "";
+		if(Keystone.lists.length == null){
+    		var list = Keystone.lists[Keystone.adminList];
+    		if(list){
+                admin_list_hidden_permissions = list.hidden_permissions || [];
+                admin_list_path = list.path;
+    		}
+		}else{
+            for(var i=0; i<Keystone.lists.length; i++){
+                var list = Keystone.lists[i];
+                if (list.key == Keystone.adminList){
+                    admin_list_hidden_permissions = list.hidden_permissions || [];
+                    admin_list_path = list.path;
+                    break;
+                }
+            }
+		}
+        if(admin_list_hidden_permissions.indexOf(user_permission) == -1 && admin_list_path){
+            var url = Keystone.adminPath + "/" + admin_list_path + "/" + Keystone.user._id;
+            return (
+    			<PrimaryNavItem href={url} title="User Name">
+    				{email}
+    			</PrimaryNavItem>
+            );
+        }else{
+    		var style = {"cursor": "default"};
+    		return (
+    			<li>
+    				<a title="User Name" tabIndex="-1" style={style}>
+    					{email}
+    				</a>
+    			</li>
+    		);
+        }
+	},
 	renderSignout () {
 		if (!this.props.signoutUrl) return null;
 
@@ -58,6 +97,7 @@ var PrimaryNavigation = React.createClass({
 				<PrimaryNavItem href="/" title={'Front page - ' + this.props.brand}>
 					<span className="octicon octicon-globe" />
 				</PrimaryNavItem>
+				{this.renderUser()}
 				{this.renderSignout()}
 			</ul>
 		);
