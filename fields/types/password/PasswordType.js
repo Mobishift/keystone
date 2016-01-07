@@ -31,6 +31,7 @@ password.prototype.addToSchema = function() {
 	var field = this;
 	var schema = this.list.schema;
 	var needs_hashing = '__' + field.path + '_needs_hashing';
+	var hashed = '__' + field.path + '_hashed';
 
 	this.paths = {
 		hash: this.options.hashPath || this._path.append('_hash'),
@@ -59,6 +60,8 @@ password.prototype.addToSchema = function() {
 			return next();
 		}
 		var item = this;
+		if (item[hashed]) return next();
+		item[hashed] = true;
 		bcrypt.genSalt(field.workFactor, function(err, salt) {
 			if (err) {
 				return next(err);
@@ -73,6 +76,11 @@ password.prototype.addToSchema = function() {
 			});
 		});
 	});
+	
+	schema.post('save', function(doc){
+    	doc[hashed] = false;
+	});
+	
 	this.bindUnderscoreMethods();
 };
 
