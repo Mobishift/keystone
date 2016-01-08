@@ -22,7 +22,7 @@ function location(list, path, options) {
 
 	this.enableMapsAPI = (options.geocodeGoogle===true || (options.geocodeGoogle !== false && keystone.get('google server api key'))) ? true : false;
 
-	this._properties = ['enableMapsAPI'];
+	this._properties = ['enableMapsAPI', 'use_map'];
 
 	if (!options.defaults) {
 		options.defaults = {};
@@ -150,6 +150,10 @@ location.prototype.addFilterToQuery = function(filter, query) {
 	console.log(query);
 	return query;
 };
+location.prototype.getHasFilterMethod = function(){
+	if (this.options.use_map) return false;
+	return true;
+}
 
 /**
  * Formats a list of the values stored by the field. Only paths that

@@ -21,6 +21,15 @@ module.exports = Field.create({
 		};
 	},
 
+	initPoint () {
+		var self = this;
+		self.point = {lat: 31.2289003, lng: 121.4754171};
+		if (self.props.value.geo && self.props.value.geo.length && self.props.value.geo.length == 2 && self.props.value.geo[0] != null && self.props.value.geo[1] != null){
+			self.point.lng = self.props.value.geo[0];
+			self.point.lat = self.props.value.geo[1];
+		}
+	},
+
 	componentWillMount () {
 		var collapsedFields = {};
 		_.each(['number', 'name', 'street2', 'geo'], function(i) {
@@ -71,7 +80,7 @@ module.exports = Field.create({
 	},
 
 	formatValue () {
-		return _.compact([
+		var res = [
 			this.props.value.number,
 			this.props.value.name,
 			this.props.value.street1,
@@ -80,7 +89,11 @@ module.exports = Field.create({
 			this.props.value.state,
 			this.props.value.postcode,
 			this.props.value.country
-		]).join(', ');
+		];
+		if (this.props.value.geo && this.props.value.geo.length && this.props.value.geo.length == 2){
+			res.push("(" + this.props.value.geo[0] + ", " + this.props.value.geo[1] + ")");
+		}
+		return _.compact(res).join(', ');
 	},
 
 	renderValue () {
@@ -184,11 +197,57 @@ module.exports = Field.create({
 	},
 
 	renderUI () {
-
+		var self = this;
 		if (!this.shouldRenderField()) {
 			return (
 				<FormField label={this.props.label}>{this.renderValue()}</FormField>
 			);
+		}
+
+		if(this.props.use_map){
+			var map_id = "map_" + this.props.path;
+			this.initPoint();
+			var do_work = function() {
+				var do_wait = function() {
+					setTimeout(function(){
+						do_work();
+					}, 100);
+				}
+				if(!window.googleMapReady) return do_wait();
+				var map_element = document.getElementById(map_id);
+				if(!map_element) return do_wait();
+
+				self.map = new google.maps.Map(map_element, {
+					center: self.point,
+					zoom: 12
+				});
+				self.marker = new google.maps.Marker({
+					position: self.point,
+					map: self.map
+				});
+				self.map.addListener('dragend', function() {
+					var lat = this.center.lat();
+					var lng = this.center.lng();
+					self.point.lat = lat;
+					self.point.lng = lng;
+					document.getElementById(map_id + "_lat").value = lat;
+					document.getElementById(map_id + "_lng").value = lng;
+					self.marker.setPosition( self.point );
+				});
+			}
+			setTimeout(function(){
+				do_work();
+			}, 0);
+			return (
+				<div>
+					<FormField label={this.props.label}>
+						<div id={map_id} className="map">
+						</div>
+						<FormInput name={this.props.paths.geo} id={map_id + "_lng"} ref="geo0" value={this.point.lng} type="hidden" />
+						<FormInput name={this.props.paths.geo} id={map_id + "_lat"} ref="geo1" value={this.point.lat} type="hidden" />
+					</FormField>
+				</div>
+			)
 		}
 
 		/* eslint-disable no-script-url */

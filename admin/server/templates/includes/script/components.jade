@@ -18,3 +18,9 @@ if cloudinary
 			timestamp: "#{cloudinary.timestamp}",
 			signature: "#{cloudinary.signature}"
 		}
+if googleMapKey && list.fieldTypes.location
+	script.
+		function initMap() {
+			window.googleMapReady = true;
+		}
+	script(src="https://maps.googleapis.com/maps/api/js?key=#{googleMapKey}&callback=initMap")

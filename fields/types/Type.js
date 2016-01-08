@@ -101,7 +101,15 @@ Field.prototype.getOptions = function() {
 		if (this.getProperties) {
 			Object.assign(this.__options, this.getProperties());
 		}
-		this.__options.hasFilterMethod = this.addFilterToQuery ? true : false;
+		var hasFilterMethod = false;
+		if (this.addFilterToQuery){
+			if (this.getHasFilterMethod){
+    			hasFilterMethod = this.getHasFilterMethod();
+			}else{
+    			hasFilterMethod = true;
+			}
+		}
+		this.__options.hasFilterMethod = hasFilterMethod;
 		this.__options.defaultValue = this.getDefaultValue();
 	}
 	return this.__options;

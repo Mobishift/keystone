@@ -21,6 +21,9 @@ var LocationColumn = React.createClass({
 				output.push(value[i]);
 			}
 		});
+		if (value.geo && value.geo.length && value.geo.length == 2){
+			output.push("(" + value.geo[0] + ", " + value.geo[1] + ")");
+		}
 		return (
 			<ItemsTableValue field={this.props.col.type} title={output.join(', ')}>
 				{output.join(', ')}
