@@ -166,9 +166,29 @@ var EditForm = React.createClass({
 	},
 
 	renderFooterBar () {
+		var self = this;
 		var buttons = [
 			<Button key="save" type="primary" submit>Save</Button>
 		];
+		var addition_buttons = this.props.list.addition_buttons;
+		if (addition_buttons){
+			for(var i=0; i<addition_buttons.length; i++){
+				var addition_button = addition_buttons[i];
+				var addition_button_click = function(){
+					var url = addition_button.URL;
+					var replacements = self.props.data;
+					url = url.replace(/\{(\w+)\}/g, function(all, p1) {
+						return replacements[p1] || replacements.fields[p1] || p1;
+					});
+					window.open(url, addition_button.name, addition_button.specs, addition_button.replace);
+				}
+				buttons.push(
+					<Button onClick={addition_button_click} type={addition_button.type}>
+						<ResponsiveText hiddenXS={addition_button.title} />
+					</Button>
+				);
+			}
+		}
 		buttons.push(
 			<Button key="reset" onClick={this.confirmReset} type="link-cancel">
 				<ResponsiveText hiddenXS="reset changes" visibleXS="reset" />
