@@ -23,7 +23,7 @@ module.exports = Field.create({
 
 	initPoint () {
 		var self = this;
-		self.point = {lat: 31.2289003, lng: 121.4754171};
+		self.point = {lat: 0, lng: 0};
 		if (self.props.value.geo && self.props.value.geo.length && self.props.value.geo.length == 2 && self.props.value.geo[0] != null && self.props.value.geo[1] != null){
 			self.point.lng = self.props.value.geo[0];
 			self.point.lat = self.props.value.geo[1];
@@ -196,6 +196,41 @@ module.exports = Field.create({
 		);
 	},
 
+	setPoint (lat, lng){
+		var self = this;
+		if (lat == null || lng == null){
+			lat = self.point.lat;
+			lng = self.point.lng;
+		}
+		self.point.lat = lat;
+		self.point.lng = lng;
+		document.getElementById(self.map_id + "_lat").value = lat;
+		document.getElementById(self.map_id + "_lng").value = lng;
+		self.marker.setPosition( self.point );
+	},
+
+	doSearch () {
+		var self = this;
+		var text_id = self.map_id + "_search_text";
+		var text_element = document.getElementById(text_id);
+		if(text_element){
+			var text = text_element.value;
+			if(text){
+				var geocoder = new google.maps.Geocoder();
+				geocoder.geocode({'address': text}, function(results, status) {
+					if (status === google.maps.GeocoderStatus.OK) {
+						var lat = results[0].geometry.location.lat();
+						var lng = results[0].geometry.location.lng();
+						self.setPoint(lat, lng);
+						self.map.setCenter(results[0].geometry.location);
+					} else {
+						console.log('Geocode was not successful for the following reason: ' + status);
+					}
+				});
+			}
+		}
+	},
+
 	renderUI () {
 		var self = this;
 		if (!this.shouldRenderField()) {
@@ -206,6 +241,7 @@ module.exports = Field.create({
 
 		if(this.props.use_map){
 			var map_id = "map_" + this.props.path;
+			self.map_id = map_id;
 			this.initPoint();
 			var do_work = function() {
 				var do_wait = function() {
@@ -228,11 +264,7 @@ module.exports = Field.create({
 				self.map.addListener('dragend', function() {
 					var lat = this.center.lat();
 					var lng = this.center.lng();
-					self.point.lat = lat;
-					self.point.lng = lng;
-					document.getElementById(map_id + "_lat").value = lat;
-					document.getElementById(map_id + "_lng").value = lng;
-					self.marker.setPosition( self.point );
+					self.setPoint(lat, lng);
 				});
 			}
 			setTimeout(function(){
@@ -241,6 +273,10 @@ module.exports = Field.create({
 			return (
 				<div>
 					<FormField label={this.props.label}>
+						<div style={{width: "100%", "padding-bottom": "5px"}}>
+							<FormInput id={map_id + "_search_text"} style={{width: "85%", display: "inline-block"}} />
+							<Button id={map_id + "_search_btn"} onClick={this.doSearch} style={{width: "14%", float: "right"}}>Search</Button>
+						</div>
 						<div id={map_id} className="map">
 						</div>
 						<FormInput name={this.props.paths.geo} id={map_id + "_lng"} ref="geo0" value={this.point.lng} type="hidden" />
