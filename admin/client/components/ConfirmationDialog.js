@@ -10,6 +10,7 @@ module.exports = React.createClass({
 		confirmationType: React.PropTypes.oneOf(['danger', 'warning', 'primary']),
 		onCancel: React.PropTypes.func,
 		onConfirmation: React.PropTypes.func,
+		isOpen: React.PropTypes.bool,
 	},
 	getDefaultProps () {
 		return {
