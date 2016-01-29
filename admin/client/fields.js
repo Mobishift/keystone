@@ -4,6 +4,8 @@ module.exports = {
 	booleanaction:    require('../../fields/types/booleanaction/BooleanActionField'),
 	cloudinaryimage:  require('../../fields/types/cloudinaryimage/CloudinaryImageField'),
 	cloudinaryimages: require('../../fields/types/cloudinaryimages/CloudinaryImagesField'),
+	ossfile:          require('../../fields/types/ossfile/OssFileField'),
+	ossfiles:         require('../../fields/types/ossfiles/OssFilesField'),
 	code:             require('../../fields/types/code/CodeField'),
 	color:            require('../../fields/types/color/ColorField'),
 	date:             require('../../fields/types/date/DateField'),
