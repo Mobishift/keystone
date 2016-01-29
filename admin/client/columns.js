@@ -4,6 +4,8 @@ var Columns = {
 	booleanaction    : require('../../fields/types/booleanaction/BooleanActionColumn'),
 	cloudinaryimage  : require('../../fields/types/cloudinaryimage/CloudinaryImageColumn'),
 	cloudinaryimages : require('../../fields/types/cloudinaryimages/CloudinaryImagesColumn'),
+	ossfile          : require('../../fields/types/ossfile/OssFileColumn'),
+	ossfiles         : require('../../fields/types/ossfiles/OssFilesColumn'),
 	code             : require('../../fields/types/code/CodeColumn'),
 	color            : require('../../fields/types/color/ColorColumn'),
 	date             : require('../../fields/types/date/DateColumn'),
