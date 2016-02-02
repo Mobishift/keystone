@@ -61,9 +61,11 @@ module.exports = React.createClass({
 			month = moment(value, this.props.format).toDate();
 		}
 		this.setState({ value, month }, this.showCurrentDate);
+		if(this.props && this.props.onChange) this.props.onChange(e);
 	},
 
 	handleDaySelect (e, day, modifiers) {
+    	var self = this;
 		if (modifiers.indexOf('disabled') > -1) {
 			return;
 		}
@@ -71,6 +73,7 @@ module.exports = React.createClass({
 			value: moment(day).format(this.props.format),
 			month: day,
 		}, () => {
+    		if(self.props && self.props.onChange) self.props.onChange({target: {value: self.state.value}});
 			setTimeout(() => {
 				this.setState({
 					pickerIsOpen: false
