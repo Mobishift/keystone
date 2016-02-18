@@ -414,7 +414,7 @@ module.exports = Field.create({
     		var value = '';
     		var remove = [];
     		_.each(this.state.thumbnails, function (thumb) {
-    			if (thumb && thumb.props.deleted) remove.push(thumb.props.public_id);
+    			if (thumb && thumb.props.deleted) remove.push(thumb.props._id);
     		});
     		if (remove.length) value = 'remove:' + remove.join(',');
     
