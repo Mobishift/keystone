@@ -7,40 +7,41 @@ var FormInput = require('elemental').FormInput;
 
 var lastId = 0;
 
-function newItem (value) {
-	lastId = lastId + 1;
-	return { key: 'i' + lastId, value: value };
-}
-
-function reduceValues (values) {
-	return values.map(i => i.value);
-}
-
 module.exports = {
+    newItem (value) {
+    	lastId = lastId + 1;
+    	return { key: 'i' + lastId, value: value };
+    },
+
+    reduceValues (values) {
+    	return values.map(i => i.value);
+    },
+
 	getInitialState: function() {
 		return {
-			values: this.props.value.map(newItem)
+			values: this.props.value.map(this.newItem)
 		};
 	},
 
 	componentWillReceiveProps: function(nextProps) {
-		if (nextProps.value.join('|') !== reduceValues(this.state.values).join('|')) {
+    	var self = this;
+		if (nextProps.value.join('|') !== self.reduceValues(this.state.values).join('|')) {
 			this.setState({
-				values: nextProps.value.map(newItem)
+				values: nextProps.value.map(self.newItem)
 			});
 		}
 	},
 
 	addItem: function() {
 		var self = this;
-		var newValues = this.state.values.concat(newItem(''));
+		var newValues = this.state.values.concat(self.newItem(''));
 		this.setState({
 			values: newValues
 		}, () => {
 			if (!this.state.values.length) return;
 			ReactDOM.findDOMNode(this.refs['item_' + this.state.values.length]).focus();
 		});
-		this.valueChanged(reduceValues(newValues));
+		this.valueChanged(self.reduceValues(newValues));
 	},
 
 	removeItem: function(i) {
@@ -50,7 +51,7 @@ module.exports = {
 		}, function() {
 			ReactDOM.findDOMNode(this.refs.button).focus();
 		});
-		this.valueChanged(reduceValues(newValues));
+		this.valueChanged(this.reduceValues(newValues));
 	},
 
 	updateItem: function(i, event) {
@@ -60,7 +61,7 @@ module.exports = {
 		this.setState({
 			values: updatedValues
 		});
-		this.valueChanged(reduceValues(updatedValues));
+		this.valueChanged(this.reduceValues(updatedValues));
 	},
 
 	valueChanged: function(values) {

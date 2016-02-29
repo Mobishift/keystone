@@ -17,7 +17,7 @@ function datearray(list, path, options) {
 	this._nativeType = [Date];
 	this._defaultSize = 'medium';
 	this._underscoreMethods = ['format'];
-	this._properties = ['formatString'];
+	this._properties = ['formatString', 'combine', 'no_past'];
 
 	this.parseFormatString = options.parseFormat || 'YYYY-MM-DD';
 	this.formatString = (options.format === false) ? false : (options.format || 'Do MMM YYYY');
